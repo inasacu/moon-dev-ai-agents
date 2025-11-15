@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cat:*)",
+      "Bash(chmod:*)",
+      "Bash(git check-ignore:*)",
+      "Bash(curl:*)",
+      "Bash(git remote:*)",
+      "Bash(git remote add:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(crontab:*)",
+      "Bash(/Users/padilla/WorkLocal/moon-dev-ai-agents/sync_upstream_daily.sh:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
