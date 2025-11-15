@@ -166,3 +166,34 @@ src/data/chat_agent/*.mov
 
 # Video Agent - Sora 2 generated videos
 src/data/video_agent/
+
+# ============================================
+# PERSONAL FILES - Padi's Private Work
+# ============================================
+# These files are specific to YOUR fork and should not be shared
+
+# Personal documentation and notes
+NOTES.md
+TODO.md
+PERSONAL_*.md
+*.local
+
+# Personal configurations
+config.local.py
+src/config.local.py
+secrets.local.json
+
+# Personal data folders
+src/data/my_data/
+src/data/padi/
+
+# Personal agent development
+src/agents/custom/my_*.py
+src/agents/personal/
+
+# Personal strategies
+src/strategies/custom/padi_*.py
+
+# Backup files
+backup_*.py
+*.backup
