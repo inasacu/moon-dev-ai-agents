@@ -198,3 +198,5 @@ src/strategies/custom/padi_*.py
 # Backup files
 backup_*.py
 *.backup
+
+ATC Bootcamp Code 2025/
