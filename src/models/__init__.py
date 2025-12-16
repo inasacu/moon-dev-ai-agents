@@ -10,6 +10,7 @@ from .openai_model import OpenAIModel
 # from .gemini_model import GeminiModel  # Temporarily disabled due to protobuf conflict
 from .deepseek_model import DeepSeekModel
 from .model_factory import model_factory
+from .token_tracker import token_tracker
 
 __all__ = [
     'BaseModel',
@@ -19,5 +20,6 @@ __all__ = [
     'OpenAIModel',
     # 'GeminiModel',  # Temporarily disabled due to protobuf conflict
     'DeepSeekModel',
-    'model_factory'
+    'model_factory',
+    'token_tracker'
 ] 

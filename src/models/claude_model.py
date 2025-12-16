@@ -6,6 +6,7 @@ Built with love by Moon Dev 🚀
 from anthropic import Anthropic
 from termcolor import cprint
 from .base_model import BaseModel, ModelResponse
+from .token_tracker import token_tracker
 
 class ClaudeModel(BaseModel):
     """Implementation for Anthropic's Claude models"""
@@ -38,11 +39,12 @@ class ClaudeModel(BaseModel):
             cprint(f"❌ Failed to initialize Claude model: {str(e)}", "red")
             self.client = None
     
-    def generate_response(self, 
+    def generate_response(self,
         system_prompt: str,
         user_content: str,
         temperature: float = 0.7,
         max_tokens: int = 1024,
+        agent_name: str = "unknown",
         **kwargs
     ) -> ModelResponse:
         """Generate a response using Claude"""
@@ -56,14 +58,28 @@ class ClaudeModel(BaseModel):
                     {"role": "user", "content": user_content}
                 ]
             )
-            
+
+            # Log token usage for tracking
+            input_tokens = response.usage.input_tokens
+            output_tokens = response.usage.output_tokens
+            token_tracker.log_usage(
+                model_name=self.model_name,
+                input_tokens=input_tokens,
+                output_tokens=output_tokens,
+                agent_name=agent_name
+            )
+
             return ModelResponse(
                 content=response.content[0].text.strip(),
                 raw_response=response,
                 model_name=self.model_name,
-                usage={"completion_tokens": response.usage.output_tokens}
+                usage={
+                    "input_tokens": input_tokens,
+                    "output_tokens": output_tokens,
+                    "total_tokens": input_tokens + output_tokens
+                }
             )
-            
+
         except Exception as e:
             cprint(f"❌ Claude generation error: {str(e)}", "red")
             raise

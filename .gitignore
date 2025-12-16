@@ -2,6 +2,8 @@
 # Keep your secrets safe! 🔒
 
 # API Keys and Sensitive Data
+credentials/
+**/credentials/
 src/data/codetotext
 src/data/million_agent
 src/data/Arxiv
@@ -10,6 +12,8 @@ dontshare.py
 **/dontshare.py
 secrets.json
 config.private.py
+api_secrets.py
+**/api_secrets.py
 MYNOTES.md
 temp_data/
 src/data/rbi_pp_multi
@@ -54,6 +58,7 @@ venv/
 ENV/
 .env/
 .venv/
+.moonview_env
 
 # IDEs and Editors
 .idea/

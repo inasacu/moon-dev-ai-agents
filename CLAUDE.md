@@ -10,15 +10,27 @@ This is an experimental AI trading system that orchestrates 48+ specialized AI a
 
 ### Environment Setup
 ```bash
-# Use existing conda environment (DO NOT create new virtual environments)
-conda activate tflow
+# This project shares a Python venv with ~/WorkLocal/moonview
+# The .moonview_env symlink points to the shared environment
 
-# Install/update dependencies
-pip install -r requirements.txt
+# Activate the shared environment
+source .moonview_env/bin/activate
+
+# Or use the Python directly
+.moonview_env/bin/python src/main.py
+
+# Install/update dependencies (updates shared environment)
+.moonview_env/bin/pip install -r requirements.txt
 
 # IMPORTANT: Update requirements.txt every time you add a new package
-pip freeze > requirements.txt
+.moonview_env/bin/pip freeze > requirements.txt
 ```
+
+#### Shared Environment Details
+- **Location**: Symlink `.moonview_env` → `~/WorkLocal/moonview/.moonview_env`
+- **Python Version**: 3.13.3
+- **Key Packages**: anthropic, solana, groq, google-generativeai, discord.py, tweepy, web3, anchorpy, flask, opencv-python, and 200+ more
+- **Why Shared**: Avoids redundant installs across moon-dev-ai-agents and moonview projects
 
 ### Running the System
 ```bash
@@ -89,10 +101,37 @@ response = model.generate_response(system_prompt, user_content, temperature, max
 - Agent behavior: `SLEEP_BETWEEN_RUNS_MINUTES`, `ACTIVE_AGENTS` dict in `main.py`
 - AI settings: `AI_MODEL`, `AI_MAX_TOKENS`, `AI_TEMPERATURE`
 
-**Environment Variables**: `.env` (see `.env_example`)
-- Trading APIs: `BIRDEYE_API_KEY`, `MOONDEV_API_KEY`, `COINGECKO_API_KEY`
-- AI Services: `ANTHROPIC_KEY`, `OPENAI_KEY`, `DEEPSEEK_KEY`, `GROQ_API_KEY`, `GEMINI_KEY`
-- Blockchain: `SOLANA_PRIVATE_KEY`, `HYPER_LIQUID_ETH_PRIVATE_KEY`, `RPC_ENDPOINT`
+**Environment Variables**: `.env` (see `.env_example` for full documentation)
+
+| Category | Variables | Purpose |
+|----------|-----------|---------|
+| **Trading Data** | `BIRDEYE_API_KEY`, `MOONDEV_API_KEY`, `COINGECKO_API_KEY` | Token data, prices, signals |
+| **AI Services** | `ANTHROPIC_KEY`, `OPENAI_KEY`, `DEEPSEEK_KEY`, `GROQ_API_KEY`, `GEMINI_KEY` | LLM providers |
+| **Blockchain** | `SOLANA_PRIVATE_KEY`, `RPC_ENDPOINT` | Solana wallet & RPC |
+| **Exchanges** | `HYPER_LIQUID_KEY`, `HYPER_LIQUID_ETH_PRIVATE_KEY`, `ASTER_API_KEY`, `X10_API_KEY` | CEX/DEX trading |
+| **Social** | `TWITTER_*`, `TWILIO_*`, `YOUTUBE_API_KEY` | Content & notifications |
+
+Setup: `cp .env_example .env` then fill in your keys
+
+**Credentials Module** (Alternative to .env): `credentials/api_secrets.py`
+- Shared with moonview project - contains all API keys in Python format
+- Git-ignored and permission-protected (chmod 600)
+- Usage:
+```python
+from credentials.api_secrets import ANTHROPIC_KEY, BINANCE_API_KEY
+# Or load all to environment:
+from credentials.api_secrets import load_to_env
+load_to_env()
+```
+
+**Config Module**: `config/__init__.py`
+- Shared configuration from moonview project (1100+ lines)
+- Contains: crypto metadata, API endpoints, exchange configs, timeframes, display settings
+- Usage:
+```python
+from config import CRYPTO_METADATA, BINANCE_API_URL, Colors, PROJECT_PATH
+from config import get_exchange_symbol, get_size_indicator, format_number
+```
 
 ### Shared Utilities
 
@@ -117,7 +156,7 @@ Result Storage (CSV/JSON in src/data/) → Optional Trade Execution
 ### File Management
 - **Keep files under 800 lines** - if longer, split into new files and update README
 - **DO NOT move files without asking** - you can create new files but no moving
-- **NEVER create new virtual environments** - use existing `conda activate tflow`
+- **Use shared environment** - `.moonview_env/bin/python` (symlinked from moonview project)
 - **Update requirements.txt** after adding any new package
 
 ### Backtesting
@@ -218,6 +257,26 @@ ohlcv = get_ohlcv_data(token_address, timeframe='1H', days_back=3)
 # Get current price
 price = token_price(token_address)
 ```
+
+## Moon Dev YouTube Content Program
+
+### Earning Structure (5+ Minute Videos Only)
+
+| Monthly Views | Earnings per 10,000 Views |
+|---------------|---------------------------|
+| 10,000 views  | $69 per 10,000 views      |
+| 50,000 views  | $100 per 10,000 views     |
+
+**Maximum Earnings**: Up to $1,000 per video, up to $10,000 per month
+
+**Requirements**:
+- Videos must be **5 minutes or longer**
+- **YouTube ONLY** (no other platforms accepted)
+
+### Source Video Resources
+
+- **Long Videos Dropbox**: https://www.dropbox.com/scl/fo/d0rjdyus9q3pok5nbmo7b/AM9LOmUDv8KIjmH6ypTALx0?rlkey=klg4tinvneqyui46r6851liwa&st=0zxfym3w&dl=0
+- **Moon Dev YouTube Channel**: https://www.youtube.com/@moondevonyt/videos (use tools to download)
 
 ## Project Philosophy
 

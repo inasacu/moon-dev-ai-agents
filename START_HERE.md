@@ -11,6 +11,8 @@ This document is your entry point to all the documentation created for your setu
 | What You Need | Document | Time |
 |---------------|----------|------|
 | **"I just got here, what do I do first?"** | This file (keep reading!) | 5 min |
+| **"I need to get back on track!"** | [COURSE_RECOVERY_GUIDE.md](COURSE_RECOVERY_GUIDE.md) | 15 min |
+| **"What's my training progress?"** | [MOONDEV_TRAINING_PROGRESS.md](MOONDEV_TRAINING_PROGRESS.md) | 10 min |
 | **"How do I fork on GitHub?"** | [FORK_STEP_BY_STEP.md](FORK_STEP_BY_STEP.md) | 10 min |
 | **"How does this fork thing work?"** | [FORK_EXPLAINED.md](FORK_EXPLAINED.md) | 20 min |
 | **"Give me the Git commands I need"** | [GIT_QUICK_REFERENCE.md](GIT_QUICK_REFERENCE.md) | 5 min |
@@ -51,6 +53,21 @@ This document is your entry point to all the documentation created for your setu
 ## 📚 Document Library
 
 ### Your Personal Documentation (Created for You)
+
+#### 0. **MOONDEV_TRAINING_PROGRESS.md** (NEW!)
+**Purpose:** Track your progress through Moon Dev's training course
+
+**Contents:**
+- Dropbox resource link (course materials)
+- Training days 1-15 completion status
+- New code additions documented
+- New agents and scripts overview
+- Environment setup checklist
+- Quick reference for running agents
+
+**When to read:** At the start of each session to review progress and plan next steps
+
+---
 
 #### 1. **ANALYSIS.md** (1,050 lines)
 **Purpose:** Comprehensive deep-dive into the Moon Dev project
