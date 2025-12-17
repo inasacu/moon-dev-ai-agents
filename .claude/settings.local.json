@@ -37,7 +37,12 @@
       "Bash(git -C /Users/padilla/WorkLocal/moon-dev-ai-agents diff CLAUDE.md)",
       "Bash(git -C /Users/padilla/WorkLocal/moon-dev-ai-agents diff src/models/claude_model.py)",
       "Bash(git -C /Users/padilla/WorkLocal/moon-dev-ai-agents diff src/models/__init__.py)",
-      "Bash(git -C /Users/padilla/WorkLocal/moon-dev-ai-agents diff .env_example)"
+      "Bash(git -C /Users/padilla/WorkLocal/moon-dev-ai-agents diff .env_example)",
+      "Bash(git -C /Users/padilla/WorkLocal/moon-dev-ai-agents commit:*)",
+      "Bash(git -C /Users/padilla/WorkLocal/moon-dev-ai-agents log -1 --stat)",
+      "Bash(for:*)",
+      "Bash(do echo \"=== $f ===\" grep -n -E \"dontshare|dont_share|from.*import.*key|import.*key\" \"$f\")",
+      "Bash(grep:*)"
     ],
     "deny": [],
     "ask": []
