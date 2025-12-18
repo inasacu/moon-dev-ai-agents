@@ -41,9 +41,19 @@
       "Bash(git -C /Users/padilla/WorkLocal/moon-dev-ai-agents commit:*)",
       "Bash(git -C /Users/padilla/WorkLocal/moon-dev-ai-agents log -1 --stat)",
       "Bash(for:*)",
-      "Bash(do echo \"=== $f ===\" grep -n -E \"dontshare|dont_share|from.*import.*key|import.*key\" \"$f\")",
       "Bash(grep:*)",
-      "Bash(MPLBACKEND=Agg .moonview_env/bin/python:*)"
+      "Bash(MPLBACKEND=Agg .moonview_env/bin/python:*)",
+      "Bash(MPLBACKEND=Agg ../.moonview_env/bin/python:*)",
+      "Bash(git -C /Users/padilla/WorkLocal/moon-dev-ai-agents log --oneline -10)",
+      "Bash(git -C /Users/padilla/WorkLocal/moonview log --oneline -10)",
+      "Bash(wc:*)",
+      "Bash(git -C /Users/padilla/WorkLocal/moon-dev-ai-agents diff docs/README.md)",
+      "Bash(git -C /Users/padilla/WorkLocal/moon-dev-ai-agents add:*)",
+      "Bash(git -C /Users/padilla/WorkLocal/moon-dev-ai-agents diff --stat \"mean reversion june 21/\")",
+      "Bash(git -C /Users/padilla/WorkLocal/moon-dev-ai-agents diff --cached --stat)",
+      "Bash(git -C /Users/padilla/WorkLocal/moon-dev-ai-agents log --oneline -3)",
+      "Bash(git -C /Users/padilla/WorkLocal/moon-dev-ai-agents push)",
+      "Bash(git -C /Users/padilla/WorkLocal/moon-dev-ai-agents diff .claude/settings.local.json)"
     ],
     "deny": [],
     "ask": []
