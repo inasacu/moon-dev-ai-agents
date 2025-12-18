@@ -31,7 +31,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from datetime import datetime, timedelta
-import nice_funcs as n 
+import general_functions as n 
 from eth_account.signers.local import LocalAccount
 import eth_account
 import json

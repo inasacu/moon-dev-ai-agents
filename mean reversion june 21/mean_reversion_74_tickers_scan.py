@@ -21,7 +21,7 @@ import pandas as pd
 import numpy as np
 from datetime import date, datetime, timezone, tzinfo
 import time, schedule
-import nice_funcs as n
+import general_functions as n
 import random
 
 # Binance Futures exchange setup
