@@ -2,7 +2,7 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from credentials.api_secrets import HYPERLIQUID_SECRET_KEY as key
+from credentials.api_secrets import HYPERLIQUID_SECRET_KEY as key, HYPERLIQUID_URL
 
 from eth_account.signers.local import LocalAccount
 import eth_account
@@ -19,6 +19,8 @@ import requests
 from datetime import datetime, timedelta
 import pandas_ta as ta
 import ccxt 
+
+
 print('ONLY WORKS ON 3.8.5 QUANT INTERPRETER')
 
 symbol = 'SOL' 
@@ -35,7 +37,7 @@ cb_symbol = symbol + '/USDT' #BTC/USD
 
 def ask_bid(symbol):
 
-    url = 'https://api.hyperliquid.xyz/info'
+    url = HYPERLIQUID_URL
     headers = {'Content-Type': 'application/json'}
 
     data = {
@@ -68,7 +70,7 @@ def get_sz_px_decimals(symbol):
     if size isnt right, we get this error. to avoid it use the sz decimal func
     {'error': 'Invalid order size'}
     '''
-    url = 'https://api.hyperliquid.xyz/info'
+    url = HYPERLIQUID_URL
     headers = {'Content-Type': 'application/json'}
     data = {'type': 'meta'}
 
@@ -236,7 +238,7 @@ def get_ohlcv2(symbol, interval, lookback_days):
     end_time = datetime.now()
     start_time = end_time - timedelta(days=lookback_days)
     
-    url = 'https://api.hyperliquid.xyz/info'
+    url = HYPERLIQUID_URL
     headers = {'Content-Type': 'application/json'}
     data = {
         "type": "candleSnapshot",
@@ -570,7 +572,7 @@ def pnl_close(symbol, target, max_loss, account):
 
 
 def fetch_candle_snapshot(symbol, interval, start_time, end_time):
-    url = 'https://api.hyperliquid.xyz/info'
+    url = HYPERLIQUID_URL
     headers = {'Content-Type': 'application/json'}
     data = {
         "type": "candleSnapshot",

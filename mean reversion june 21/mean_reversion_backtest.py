@@ -15,30 +15,24 @@ from backtesting.test import SMA
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-import psycopg2
 import sys
 import os
 
-# Add project root to path for credentials import
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Import database functions
+from general_database_functions import (
+    fetch_ohlcv_from_db,
+    check_available_data,
+    GRANULARITY_4H
+)
 
 # =============================================================================
 # CONFIGURATION
 # =============================================================================
 
-# Database configuration (matches moonview setup)
-DB_CONFIG = {
-    'dbname': 'postgres',
-    'user': 'padilla',
-    'password': '',
-    'host': 'localhost',
-    'port': 5432
-}
-
 # Backtesting configuration
 SYMBOL = 'BTC'              # Symbol to backtest: 'BTC' or 'ETH'
 TIMEFRAME = '4h'            # Timeframe
-GRANULARITY = 14400         # 4h in seconds (4 * 60 * 60)
+GRANULARITY = GRANULARITY_4H  # 4h in seconds (14400)
 CANDLE_LIMIT = 1000         # Number of candles (~6 months of 4h data)
 CONVERSION = 'USDT'         # Quote currency
 
@@ -50,141 +44,6 @@ COMMISSION = 0.002          # 0.2% commission (Binance futures)
 SMA_RANGE = range(10, 21)       # SMA periods to test (10-20)
 BUY_PCT_RANGE = range(5, 20)    # Buy % below SMA (5-19%)
 SELL_PCT_RANGE = range(5, 20)   # Sell % above SMA (5-19%)
-
-# =============================================================================
-# DATABASE FUNCTIONS
-# =============================================================================
-
-def get_db_connection():
-    """Establish connection to PostgreSQL database."""
-    try:
-        conn = psycopg2.connect(
-            dbname=DB_CONFIG['dbname'],
-            user=DB_CONFIG['user'],
-            password=DB_CONFIG['password'],
-            host=DB_CONFIG['host'],
-            port=DB_CONFIG['port']
-        )
-        return conn
-    except Exception as e:
-        print(f"Database connection error: {e}")
-        print("Make sure PostgreSQL is running and the database exists.")
-        return None
-
-
-def fetch_ohlcv_from_db(symbol, granularity, limit, conversion='USDT'):
-    """
-    Fetch OHLCV data from the crypto.binance_candles table.
-
-    Args:
-        symbol: Crypto symbol (e.g., 'BTC', 'ETH')
-        granularity: Timeframe in seconds (14400 for 4h)
-        limit: Number of candles to fetch
-        conversion: Quote currency (default: 'USDT')
-
-    Returns:
-        pandas DataFrame with OHLCV data
-    """
-    conn = get_db_connection()
-    if conn is None:
-        return None
-
-    try:
-        query = """
-            SELECT
-                timestamp,
-                open,
-                high,
-                low,
-                close,
-                volume
-            FROM crypto.binance_candles
-            WHERE symbol = %s
-              AND granularity = %s
-              AND conversion = %s
-            ORDER BY timestamp DESC
-            LIMIT %s
-        """
-
-        df = pd.read_sql_query(
-            query,
-            conn,
-            params=(symbol, granularity, conversion, limit)
-        )
-
-        if df.empty:
-            print(f"No data found for {symbol} with granularity {granularity}")
-            print(f"Try running the moonview data pull first:")
-            print(f"  cd ~/WorkLocal/moonview && ./streamline/run_xchange.sh --symbols {symbol} --timeframes 4h")
-            return None
-
-        # Sort by timestamp ascending (oldest first)
-        df = df.sort_values('timestamp')
-
-        # Set timestamp as index (convert timezone-aware to UTC then drop timezone)
-        df['timestamp'] = pd.to_datetime(df['timestamp'], utc=True).dt.tz_localize(None)
-        df.set_index('timestamp', inplace=True)
-
-        # Rename columns to match backtesting.py requirements
-        df.columns = ['Open', 'High', 'Low', 'Close', 'Volume']
-
-        # Convert to float
-        for col in df.columns:
-            df[col] = df[col].astype(float)
-
-        print(f"Fetched {len(df)} candles for {symbol}")
-        print(f"Date range: {df.index.min()} to {df.index.max()}")
-
-        return df
-
-    except Exception as e:
-        print(f"Error fetching data: {e}")
-        return None
-    finally:
-        conn.close()
-
-
-def check_available_data():
-    """Check what data is available in the database."""
-    conn = get_db_connection()
-    if conn is None:
-        return
-
-    try:
-        query = """
-            SELECT
-                symbol,
-                conversion,
-                granularity,
-                COUNT(*) as candle_count,
-                MIN(timestamp) as earliest,
-                MAX(timestamp) as latest
-            FROM crypto.binance_candles
-            WHERE granularity = %s
-            GROUP BY symbol, conversion, granularity
-            ORDER BY symbol
-        """
-
-        df = pd.read_sql_query(query, conn, params=(GRANULARITY,))
-
-        if df.empty:
-            print(f"No {TIMEFRAME} data found in database.")
-            print("Run the moonview data pull first:")
-            print("  cd ~/WorkLocal/moonview && ./streamline/run_xchange.sh --timeframes 4h")
-        else:
-            print(f"\nAvailable {TIMEFRAME} data in database:")
-            print("-" * 80)
-            print(df.to_string(index=False))
-            print("-" * 80)
-
-        return df
-
-    except Exception as e:
-        print(f"Error checking data: {e}")
-        return None
-    finally:
-        conn.close()
-
 
 # =============================================================================
 # STRATEGY
@@ -232,7 +91,7 @@ def run_backtest(symbol='BTC'):
 
     # Check available data first
     print("\nChecking database for available data...")
-    check_available_data()
+    check_available_data(GRANULARITY, TIMEFRAME)
 
     # Fetch data from database
     print(f"\nFetching {symbol} {TIMEFRAME} data from database...")

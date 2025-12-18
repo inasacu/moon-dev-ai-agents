@@ -22,7 +22,7 @@ A complete mean reversion trading system for cryptocurrency perpetual futures, f
 14. [Setup & Installation](#setup--installation)
 15. [Usage](#usage)
 16. [Risk Management](#risk-management)
-17. [Data Files](#data-files)
+17. [Data Source](#data-source)
 18. [Troubleshooting](#troubleshooting)
 
 ---
@@ -668,22 +668,77 @@ The bot will:
 
 ---
 
-## Data Files
+## Data Source
 
-**Data Source:** MoonView PostgreSQL Database
+### MoonView PostgreSQL Database
+
+The backtest connects directly to the MoonView PostgreSQL database for OHLCV data.
+
+**Database:** PostgreSQL (localhost:5432)
+
+**Schema & Table:**
+```
+Schema: crypto
+Table:  binance_candles
+```
+
+**Table Columns:**
+| Column | Type | Description |
+|--------|------|-------------|
+| `id` | bigint | Primary key |
+| `symbol` | varchar | Crypto symbol (BTC, ETH, etc.) |
+| `timestamp` | timestamptz | Candle timestamp |
+| `open` | numeric | Opening price |
+| `high` | numeric | Highest price |
+| `low` | numeric | Lowest price |
+| `close` | numeric | Closing price |
+| `volume` | numeric | Trading volume |
+| `granularity` | integer | Timeframe in seconds |
+| `conversion` | varchar | Quote currency (USDT) |
+
+**Granularity Values:**
+| Timeframe | Granularity (seconds) |
+|-----------|----------------------|
+| 1m | 60 |
+| 5m | 300 |
+| 15m | 900 |
+| 1h | 3600 |
+| **4h** | **14400** ← Used by backtest |
+| 6h | 21600 |
+| 1d | 86400 |
+
+### Available Data
 
 | Symbol | Timeframe | Candles | Date Range |
 |--------|-----------|---------|------------|
 | BTC | 4H | 2,202 | Dec 2024 - Dec 2025 |
 | ETH | 4H | 2,202 | Dec 2024 - Dec 2025 |
+| SOL | 4H | 2,202 | Dec 2024 - Dec 2025 |
+| + 20 more symbols... |
 
-*Legacy CSV files (WIF, POPCAT) are still present but no longer used by the backtest.*
+### Query Example
 
-### Data Format
-```csv
-timestamp,open,high,low,close,volume
-2024-01-01 00:00:00,1.234,1.250,1.220,1.245,1000000
+```sql
+SELECT timestamp, open, high, low, close, volume
+FROM crypto.binance_candles
+WHERE symbol = 'BTC'
+  AND granularity = 14400
+  AND conversion = 'USDT'
+ORDER BY timestamp DESC
+LIMIT 1000
 ```
+
+### Populating the Database
+
+If data is missing, run the MoonView data pull:
+```bash
+cd ~/WorkLocal/moonview
+./streamline/run_xchange.sh --symbols BTC ETH --timeframes 4h
+```
+
+### Legacy CSV Files
+
+*Archived in `archive/csv/` - no longer used by the backtest.*
 
 ---
 
