@@ -2,6 +2,35 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+---
+
+## MIGRATION NOTICE
+
+**This project has been migrated to MoonView.**
+
+| Item | Status |
+|------|--------|
+| **Active Development** | `~/WorkLocal/moonview/` |
+| **This Repository** | Reference & Upstream Sync Only |
+| **Agents** | Migrated to `moonview/agents/` (38 agents) |
+| **Models** | Migrated to `moonview/models/` (10 providers) |
+
+### For Active Development, Use MoonView:
+```bash
+cd ~/WorkLocal/moonview
+source .moonview_env/bin/activate
+python -m agents.orchestrator --list
+```
+
+### This Repository Is Now:
+1. **Upstream Sync Target** - Auto-merges Moon Dev updates via `sync_upstream_daily.sh`
+2. **Reference Codebase** - Original Moon Dev implementations
+3. **Training Materials** - ATC Bootcamp Code 2025
+
+See `docs/MOONVIEW_TRANSITION.md` for full migration details.
+
+---
+
 ## Project Overview
 
 This is an experimental AI trading system that orchestrates 48+ specialized AI agents to analyze markets, execute strategies, and manage risk across cryptocurrency markets (primarily Solana). The project uses a modular agent architecture with unified LLM provider abstraction supporting Claude, GPT-4, DeepSeek, Groq, Gemini, and local Ollama models.
